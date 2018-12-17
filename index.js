@@ -1,17 +1,15 @@
-import express from "express";
-import { dbURI } from "./config/keys";
-import routes from './routes';
+const express   = require('express');
+const {dbURI}   = require('./config/keys');
+const app       = express();
+const PORT      = process.env.PORT || 3000;
 
 //Third party dependencies
-import mongoose from "mongoose";
-import passport from "passport";
-import bodyParser from "body-parser";
-import Joi from "joi";
-
-require("express-async-errors");
-Joi.objectId = require("joi-objectid")(Joi);
-const app = express();
-const PORT = process.env.PORT || 3000;
+require('express-async-errors');
+const mongoose  = require('mongoose');
+const passport  = require('passport');
+const bodyParser= require('body-parser');
+const Joi       = require('joi');
+Joi.objectId    = require('joi-objectid')(Joi);
 
 //Connection to the database
 mongoose
@@ -33,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //Import routes
-app.use("/api", routes);
+app.use('/api', require('./routes'));
 
 //Error handling middleware
 app.use(function(err, req, res, next) {

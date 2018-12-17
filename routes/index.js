@@ -4,4 +4,4 @@ Router.get("/", (req, res)=>{
   res.json('Sup')
 })
 
-export default Router;
+module.exports = Router;
