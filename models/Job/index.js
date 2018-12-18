@@ -51,7 +51,10 @@ const JobSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  numberOfViews: Number,
+  numberOfViews: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date,
     default: Date.now

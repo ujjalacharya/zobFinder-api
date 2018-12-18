@@ -36,3 +36,25 @@ exports.validateCategory = (category) => {
   }
   return Joi.validate(category, schema);
 }
+
+//Job Validation
+exports.validateJob = (job) => {
+  const schema = {
+      categoryId: Joi.objectId().required(),
+      title: Joi.string().min(5).max(50).required(),
+      location: Joi.string(),
+      vacancyCode: Joi.string().required().max(5),
+      numOfVacancies: Joi.number().required(),
+      availability: Joi.string().required(),
+      jobLevel: Joi.string().required(),
+      gender: Joi.string(),
+      experience: Joi.number(),
+      salary : Joi.number(),
+      negotiable : Joi.boolean(),
+      jobDescription: Joi.string(),
+      jobSpecification: Joi.string(),
+      education: Joi.string(),
+      deadline: Joi.date()
+  };
+  return Joi.validate(job, schema);
+};

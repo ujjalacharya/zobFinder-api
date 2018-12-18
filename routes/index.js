@@ -3,9 +3,7 @@ const isAdmin = require("passport");
 const isLogin = require("passport");
 const isEmployerLogin = require("passport");
 const ensureLogin = isLogin.authenticate("login-rule", { session: false });
-const ensureEmployerLogin = isEmployerLogin.authenticate("employer-rule", {
-  session: false
-});
+const ensureEmployerLogin = isEmployerLogin.authenticate("employer-rule", { session: false });
 const ensureAdmin = isAdmin.authenticate("admin-rule", { session: false });
 const { uploadAvatar } = require("../helpers/multer");
 
@@ -15,18 +13,16 @@ const employerController = require("../controllers/employerController");
 const seekerController = require("../controllers/seekerController");
 const categoryController = require("../controllers/categoryController");
 
-//job routes
+//Job routes
 Router.route("/jobs")
   .get(jobController.getAllJobs)
   .post(ensureEmployerLogin, jobController.postJob);
-
-Router.route("/unapprovedjobs")
+Router.route("/jobs/unapproved")
   .get(ensureAdmin, jobController.getAllUnapprovedJobs);
-
-Router.route("/change-job-state/:id")
-  .patch(ensureAdmin, jobController.changeJobState)
-
-Router.route("/jobs/:id").get(jobController.getJobById);
+Router.route("/jobs/changestate/:id")
+  .patch(ensureAdmin, jobController.changeJobState);
+Router.route("/jobs/:id")
+  .get(jobController.getJobById);
 
 //Categories routes
 Router.route("/categories")
@@ -38,13 +34,10 @@ Router.route("/categories/:id")
   .delete(ensureAdmin, categoryController.deleteCategory);
 
 // Employer routes
-Router.post("/employer/register", employerController.registerEmployer)
+Router
+  .post("/employer/register", employerController.registerEmployer)
   .post("/employer/login", employerController.loginEmployer)
-  .patch(
-    "/employer/switchAdminRole/:id",
-    ensureAdmin,
-    employerController.switchAdminRole
-  )
+  .patch("/employer/switchAdminRole/:id", ensureAdmin, employerController.switchAdminRole)
   .get("/employers", ensureAdmin, employerController.getAllEmployers);
 
 module.exports = Router;
