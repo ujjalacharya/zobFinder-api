@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-//User validation (Register/ Login)
+//Employer validation (Register/ Login)
 exports.validateEmployerRegisteration = (user) => {
   const schema = {
     orgName: Joi.string().required(),

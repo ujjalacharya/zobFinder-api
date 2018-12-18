@@ -27,6 +27,12 @@ mongoose
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//Passport middleware
+app.use(passport.initialize());
+require('./config/passport').isAdmin(passport);
+require('./config/passport').isLogin(passport);
+require('./config/passport').isEmployerLogin(passport);
+
 //Import routes
 app.use("/api", require("./routes"));
 

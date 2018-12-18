@@ -1,10 +1,13 @@
-const {Employer} = require("../models/Employer/index");
-const {secretKey, expireTime} = require('../config/keys.js');
+const { Employer } = require("../models/Employer/index");
+const { secretKey, expireTime } = require("../config/keys.js");
 const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
-const _ = require('lodash');
+const jwt = require("jsonwebtoken");
+const _ = require("lodash");
 
-const {validateEmployerLogin, validateEmployerRegisteration} = require('../validation');
+const {
+  validateEmployerLogin,
+  validateEmployerRegisteration
+} = require("../validation");
 
 // @@ POST api/register/
 // @@ desc Register a User
@@ -13,10 +16,10 @@ exports.registerEmployer = async (req, res) => {
   const { error } = validateEmployerRegisteration(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let employer = await Employer.findOne({email:req.body.email});
-  if (employer) return res.status(400).send('Email already registered');
+  let employer = await Employer.findOne({ email: req.body.email });
+  if (employer) return res.status(400).send("Email already registered");
 
-  console.log(req.body)
+  console.log(req.body);
 
   newemployer = new Employer({
     email: req.body.email,
@@ -34,7 +37,7 @@ exports.registerEmployer = async (req, res) => {
     orgPocEmail: req.body.orgPocEmail,
     orgPocMobile: req.body.orgPocMobile
   });
-  
+
   const salt = await bcrypt.genSalt(10);
   newemployer.password = await bcrypt.hash(newemployer.password, salt);
   await newemployer.save();
@@ -49,21 +52,25 @@ exports.registerEmployer = async (req, res) => {
 // @@ desc Login User
 // @@ access Public
 exports.loginEmployer = async (req, res) => {
-  console.log('Ehllo')
+  console.log("Ehllo");
   const { error } = validateEmployerLogin(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const employer = await Employer.findOne({ email: req.body.email });
   if (!employer) return res.status(400).json("No employer found");
 
-  const isAuth = await bcrypt.compare(req.body.password, user.password);
+  const isAuth = await bcrypt.compare(req.body.password, employer.password);
 
   if (!isAuth) return res.status(400).json("Password did not match");
 
   // res.status(200).json('Authorized');
-  const payload = { id: user.id, name: user.name, isAdmin: user.isAdmin };
+  const payload = {
+    id: employer.id,
+    name: employer.name,
+    isAdmin: employer.isAdmin
+  };
 
-  jwt.sign(payload, secretKey, { expiresIn: expireTime }, (err, token) => {
+  jwt.sign(payload, secretKey, (err, token) => {
     res.json({
       success: true,
       token: token
@@ -71,7 +78,7 @@ exports.loginEmployer = async (req, res) => {
   });
 };
 
-exports.switchAdminRole = async(req, res)=>{
+exports.switchAdminRole = async (req, res) => {
   const employer = await Employer.findOne({ _id: req.params.id });
   if (!employer) return res.status(400).json("No employer found");
 
@@ -79,11 +86,11 @@ exports.switchAdminRole = async(req, res)=>{
   await employer.save();
 
   res.status(200).json(employer);
-}
+};
 
-exports.getAllEmployers = async(req, res)=>{
-  const employers = await Employer.find({}).sort({date: -1});
+exports.getAllEmployers = async (req, res) => {
+  const employers = await Employer.find({}).sort({ date: -1 });
   if (!employers) return res.status(400).json("No employers found");
 
-  res.status(200).json(employers)
-}
+  res.status(200).json(employers);
+};

@@ -46,7 +46,7 @@ const JobSchema = new mongoose.Schema({
   jobDescription: String,
   jobSpecification: String,
   education: String,
-  deadline: Date,
+  deadline: String,
   approved: {
     type: Boolean,
     default: false

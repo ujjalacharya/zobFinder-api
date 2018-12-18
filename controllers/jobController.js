@@ -11,6 +11,14 @@ exports.getAllJobs = async (req, res) => {
   res.status(200).json(jobs);
 };
 
+// @@ GET api/jobs
+// @@ desc GET all Jobs
+// @@ access Public
+exports.getAllUnapprovedJobs = async (req, res) => {
+  const jobs = await Job.find({ approved: false }).sort({ date: -1 });
+  res.status(200).json(jobs);
+};
+
 // @@ GET api/jobs/:id
 // @@ desc GET Jobs By Id
 // @@ access Public
@@ -46,11 +54,20 @@ exports.postJob = async (req, res) => {
     jobDescription: req.body.jobDescription,
     jobSpecification: req.body.jobSpecification,
     education: req.body.education,
-    deadline: req.body.deadline,
-    employerId: req.user._id
+    deadline: req.body.deadline
   });
 
   savedjob = await job.save();
   console.log(savedjob);
   res.status(200).json(savedjob);
 };
+
+exports.changeJobState = async(req, res) =>{
+  const job = await Job.findById(req.params.id);
+
+  if(!job) return res.status(404).json("No such job found")
+
+  job.approved = !job.approved;
+  const savedjob = await job.save();
+  res.status(200).json(savedjob)
+}
