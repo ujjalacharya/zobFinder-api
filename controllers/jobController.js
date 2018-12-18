@@ -80,3 +80,27 @@ exports.changeJobState = async(req, res) =>{
   const savedjob = await job.save();
   res.status(200).json(savedjob)
 }
+
+// @@ GET PUT/job/:id
+// @@ desc Update a Job
+// @@ access Private
+exports.updateJob = async(req, res)=>{
+  const job =  await Job.findById(req.params.id);
+  if ((job.employerId.toString() !== req.user.id) && !req.user.isAdmin) return res.status(401).json('Unauthorized');
+
+  await Job.findByIdAndUpdate(req.params.id, req.body);
+  const updatedJob = await Job.findById(req.params.id)
+
+  res.status(200).json(updatedJob);
+}
+
+// @@ GET DELETE/job/:id
+// @@ desc Delete a Job
+// @@ access Private
+exports.deleteJob = async(req, res)=>{
+  const job =  await Job.findById(req.params.id);
+  if (job.employerId.toString() !== req.user.id && !req.user.isAdmin) return res.status(401).json('Unauthorized')
+  const removedjob = await job.remove();
+  
+  res.status(200).json({ success: true, removedjob })
+}

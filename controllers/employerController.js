@@ -78,6 +78,19 @@ exports.loginEmployer = async (req, res) => {
   });
 };
 
+//list job posted by specific organization
+exports.jobPosted = async(req,res) =>{
+  const employer = await Employer.findById(req.user._id);
+  if (!employer) return res.status(400).send('Invalid employer.');
+  const job = await Job.find({"employerId" : req.user._id});
+  if(!job){
+      return res.status(404).json("Not posted any job");
+  }
+  else{
+      return res.status(200).json(job);
+  }
+}
+
 exports.switchAdminRole = async (req, res) => {
   const employer = await Employer.findOne({ _id: req.params.id });
   if (!employer) return res.status(400).json("No employer found");

@@ -29,7 +29,7 @@ exports.postCategory = async(req, res) => {
 // @@ GET api/categories/:id
 // @@ desc Get a Category
 // @@ access Public
-exports.getCategory = async(req, res)=>{
+exports.getCategoryById = async(req, res)=>{
   const category = await Category.findById(req.params.id);
   if(!category) return res.status(404).json('No such category found');
 
@@ -43,7 +43,6 @@ exports.updateCategory = async(req, res)=>{
   //const updatedCategory = await Category.findOneAndUpdate({_id: req.params.id}, {$set:{name: req.body.name}},{new: true});
 
   const category = await Category.findById(req.params.id);
-
   if(!category) return res.status(404).json("No such category found!")
 
   category.name = req.body.name;
@@ -57,7 +56,6 @@ exports.updateCategory = async(req, res)=>{
 // @@ access Private - TODO
 exports.deleteCategory= async(req, res)=>{
     const deletedCategory = await Category.findOneAndDelete({_id: req.params.id});
-
     if(!deletedCategory) return res.status(404).json("No such category found!")
     
     res.status(200).json(deletedCategory);

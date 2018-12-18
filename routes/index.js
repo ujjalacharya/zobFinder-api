@@ -22,14 +22,16 @@ Router.route("/jobs/unapproved")
 Router.route("/jobs/changestate/:id")
   .patch(ensureAdmin, jobController.changeJobState);
 Router.route("/jobs/:id")
-  .get(jobController.getJobById);
+  .get(jobController.getJobById)
+  .put(ensureEmployerLogin, jobController.updateJob)
+  .delete(ensureEmployerLogin, jobController.deleteJob);
 
 //Categories routes
 Router.route("/categories")
   .get(ensureAdmin, categoryController.getAllCategories)
   .post(ensureAdmin, categoryController.postCategory);
 Router.route("/categories/:id")
-  .get(ensureAdmin, categoryController.getCategory)
+  .get(ensureAdmin, categoryController.getCategoryById)
   .put(ensureAdmin, categoryController.updateCategory)
   .delete(ensureAdmin, categoryController.deleteCategory);
 
@@ -38,6 +40,7 @@ Router
   .post("/employer/register", employerController.registerEmployer)
   .post("/employer/login", employerController.loginEmployer)
   .patch("/employer/switchAdminRole/:id", ensureAdmin, employerController.switchAdminRole)
-  .get("/employers", ensureAdmin, employerController.getAllEmployers);
+  .get("/employers", ensureAdmin, employerController.getAllEmployers)
+  .get("/employer/job-posted", ensureEmployerLogin, employerController.jobPosted);
 
 module.exports = Router;
