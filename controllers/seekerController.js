@@ -1,9 +1,11 @@
-const {Seeker} = require("../models/Seeker")
+const {Seeker} = require("../models/Seeker");
+const {Job} = require("../models/Job");
 const { secretKey, expireTime } = require("../config/keys.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mongoose = require('mongoose');
 
-const {validateSeeker, validateLogin} = require("../validation")
+const {validateSeeker, validateLogin, validateJobApplied} = require("../validation")
 
 // @@ GET api/seekers
 // @@ desc GET all seekers
@@ -82,4 +84,52 @@ exports.loginSeeker = async (req, res) => {
       token: token
     });
   });
+};
+
+
+// @@ POST api/seeker/apply-job
+// @@ desc Apply for job
+// @@ access Private(Seeker Login)
+exports.applyJob = async(req,res) =>{
+
+  const { error } = validateJobApplied(req.params);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  var id = mongoose.Types.ObjectId(req.params.jobId);
+
+  const job = await Job.findById(id);
+  if (!job) return res.status(400).send('Invalid job id.');
+
+  const seeker = await Seeker.findById(req.user._id);
+  if (!seeker) return res.status(400).send('Invalid seeker.');
+  
+  const newseeker = {
+    seekerId: req.user.id,
+    seekerName: req.user.fullName
+  };
+
+  if(job.seekers.filter(seeker => seeker.seekerId.toString() === req.user.id).length > 0){
+    return res.status(400).json({ alreadyApplied: "already applied for job" })  
+    }
+
+  job.seekers.push(newseeker);
+  const savedjob = await job.save();
+  res.status(200).json(savedjob);
+  
+};
+
+// @@ POST api/seeker/applied-job
+// @@ desc Get all applied job
+// @@ access Private(Seeker Login)
+exports.appliedJob = async(req,res) =>{
+  const seeker = await Seeker.findById(req.user._id);
+  if (!seeker) return res.status(400).send('Invalid seeker.');
+
+  const job = await Job.find({'seekers': {$elemMatch: {seekerId: req.user._id}}});
+  if(job){
+      return res.status(200).json(job);
+  }
+  else{
+      return res.send('you have not applied for any job');
+  }
 };

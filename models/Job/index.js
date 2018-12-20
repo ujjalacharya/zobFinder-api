@@ -64,10 +64,16 @@ const JobSchema = new mongoose.Schema({
     ref: "employers",
     required: true
   },
-  seekerId: [
+  seekers: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "seekers"
+      seekerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "seekers"
+      },
+      date:{
+        type: Date,
+        default: Date.now
+      }
     }
   ]
 });

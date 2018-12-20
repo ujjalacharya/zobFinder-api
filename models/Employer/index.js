@@ -55,13 +55,7 @@ const EmployerSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  },
-  jobId: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "jobs"
-    }
-  ]
+  }
 });
 
 exports.EmployerSchema = EmployerSchema;

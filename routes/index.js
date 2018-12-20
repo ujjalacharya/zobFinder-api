@@ -18,6 +18,8 @@ Router
   .get("/seekers", ensureAdmin, seekerController.getAllSeekers)
   .post("/seeker/register", uploadAvatar, seekerController.registerSeeker)
   .post("/seeker/login", seekerController.loginSeeker)
+  .post("/seeker/apply-job/:jobId", ensureLogin, seekerController.applyJob)
+  .get("/seeker/applied-job", ensureLogin, seekerController.appliedJob)
 
 //Job routes
 Router.route("/jobs")

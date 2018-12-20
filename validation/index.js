@@ -61,7 +61,7 @@ exports.validateJob = (job) => {
 };
 
 //Seeker Validation
-exports.validateSeeker = (intern) => {
+exports.validateSeeker = (seeker) => {
   const schema = {
       email: Joi.string().min(5).max(255).required(),
       fullName: Joi.string().min(3).max(50).required(),
@@ -74,5 +74,12 @@ exports.validateSeeker = (intern) => {
       state: Joi.string(),
       city: Joi.string(),
       district: Joi.string()  };
-  return Joi.validate(intern, schema);
+  return Joi.validate(seeker, schema);
+};
+
+exports.validateJobApplied = (jobId) => {
+  const schema = {
+    jobId: Joi.objectId().required()
+  };
+  return Joi.validate(jobId, schema);
 };

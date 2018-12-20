@@ -60,12 +60,6 @@ const SeekerSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "seekerexperiences"
     }
-  ],
-  job: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "jobs"
-    }
   ]
 });
 

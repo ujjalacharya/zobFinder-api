@@ -25,10 +25,13 @@ exports.getAllUnapprovedJobs = async (req, res) => {
 exports.getJobById = async (req, res) => {
   const job = await Job.findById(req.params.id);
   if (!job) return res.status(404).json("No such job found");
-  if (!job.approved && !req.user.isAdmin) return res.status(401).json("Cannot access this job");
-  job.numberOfViews += 1;
-  await job.save();
-  res.status(200).json(job);
+  if (job.approved || req.user.isAdmin){
+    job.numberOfViews += 1;
+    await job.save();
+    res.status(200).json(job);
+  } 
+  return res.status(401).json("Cannot access this job");
+ 
 };
 
 // @@ POST api/jobs
