@@ -21,7 +21,8 @@ exports.validateEmployerRegisteration = (user) => {
   return Joi.validate(user, schema); 
 }
 
-exports.validateEmployerLogin = (user) => {
+//Login validation (Employer/Seeker)
+exports.validateLogin = (user) => {
   const schema = {
     email : Joi.string().required().email().min(2),
     password : Joi.string().required().min(4)
@@ -57,4 +58,21 @@ exports.validateJob = (job) => {
       deadline: Joi.date()
   };
   return Joi.validate(job, schema);
+};
+
+//Seeker Validation
+exports.validateSeeker = (intern) => {
+  const schema = {
+      email: Joi.string().min(5).max(255).required(),
+      fullName: Joi.string().min(3).max(50).required(),
+      password: Joi.string().min(5).max(1024).required(),
+      dob: Joi.date(),
+      gender: Joi.string().required(),
+      phoneNumber: Joi.number().min(10).max(10),
+      nationality: Joi.string(),
+      maritalStatus: Joi.string(),
+      state: Joi.string(),
+      city: Joi.string(),
+      district: Joi.string()  };
+  return Joi.validate(intern, schema);
 };

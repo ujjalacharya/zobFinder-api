@@ -38,7 +38,7 @@ const SeekerSchema = new mongoose.Schema({
   state: String,
   district: String,
   city: String,
-  image: String,
+  avatar: String,
   createdAt: {
     type: Date,
     default: Date.now

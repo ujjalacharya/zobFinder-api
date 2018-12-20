@@ -5,11 +5,11 @@ const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 
 const {
-  validateEmployerLogin,
+  validateLogin,
   validateEmployerRegisteration
 } = require("../validation");
 
-// @@ POST api/register/
+// @@ POST api/employer/register/
 // @@ desc Register a User
 // @@ access Public
 exports.registerEmployer = async (req, res) => {
@@ -21,7 +21,7 @@ exports.registerEmployer = async (req, res) => {
 
   console.log(req.body);
 
-  newemployer = new Employer({
+  const newemployer = new Employer({
     email: req.body.email,
     orgName: req.body.orgName,
     password: req.body.password,
@@ -48,12 +48,12 @@ exports.registerEmployer = async (req, res) => {
   });
 };
 
-// @@ POST api/login
+// @@ POST api/employer/login
 // @@ desc Login User
 // @@ access Public
 exports.loginEmployer = async (req, res) => {
   console.log("Ehllo");
-  const { error } = validateEmployerLogin(req.body);
+  const { error } = validateLogin(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const employer = await Employer.findOne({ email: req.body.email });
@@ -78,7 +78,9 @@ exports.loginEmployer = async (req, res) => {
   });
 };
 
-//list job posted by specific organization
+// @@ POST api/employer/job-posted
+// @@ desc Get all job posted
+// @@ access Private
 exports.jobPosted = async(req,res) =>{
   const employer = await Employer.findById(req.user._id);
   if (!employer) return res.status(400).send('Invalid employer.');
@@ -91,6 +93,9 @@ exports.jobPosted = async(req,res) =>{
   }
 }
 
+// @@ POST api/employer/switchAdminRole/:id
+// @@ desc Patch- Switch admin role of employer
+// @@ access Private
 exports.switchAdminRole = async (req, res) => {
   const employer = await Employer.findOne({ _id: req.params.id });
   if (!employer) return res.status(400).json("No employer found");
@@ -101,6 +106,9 @@ exports.switchAdminRole = async (req, res) => {
   res.status(200).json(employer);
 };
 
+// @@ GET api/employers
+// @@ desc GET all employers
+// @@ access Private
 exports.getAllEmployers = async (req, res) => {
   const employers = await Employer.find({}).sort({ date: -1 });
   if (!employers) return res.status(400).json("No employers found");

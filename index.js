@@ -36,6 +36,11 @@ require('./config/passport').isEmployerLogin(passport);
 //Import routes
 app.use("/api", require("./routes"));
 
+//404 error
+app.get("*", (req, res)=>{
+  res.status(404).json("Could not find the page!")
+})
+
 // Error handling middleware
 app.use(function(err, req, res, next) {
   res.status(500).send("Something failed...");

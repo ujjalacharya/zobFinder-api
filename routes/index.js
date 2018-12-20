@@ -13,6 +13,12 @@ const employerController = require("../controllers/employerController");
 const seekerController = require("../controllers/seekerController");
 const categoryController = require("../controllers/categoryController");
 
+//Seeker controllers
+Router
+  .get("/seekers", ensureAdmin, seekerController.getAllSeekers)
+  .post("/seeker/register", uploadAvatar, seekerController.registerSeeker)
+  .post("/seeker/login", seekerController.loginSeeker)
+
 //Job routes
 Router.route("/jobs")
   .get(jobController.getAllJobs)
@@ -37,10 +43,10 @@ Router.route("/categories/:id")
 
 // Employer routes
 Router
+  .get("/employers", ensureAdmin, employerController.getAllEmployers)
   .post("/employer/register", employerController.registerEmployer)
   .post("/employer/login", employerController.loginEmployer)
   .patch("/employer/switchAdminRole/:id", ensureAdmin, employerController.switchAdminRole)
-  .get("/employers", ensureAdmin, employerController.getAllEmployers)
   .get("/employer/job-posted", ensureEmployerLogin, employerController.jobPosted);
 
 module.exports = Router;
