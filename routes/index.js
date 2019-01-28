@@ -20,6 +20,7 @@ Router
   .post("/seeker/login", seekerController.loginSeeker)
   .post("/seeker/apply-job/:jobId", ensureLogin, seekerController.applyJob)
   .get("/seeker/applied-job", ensureLogin, seekerController.appliedJob)
+  .patch("/seeker/cancel-job/:jobId", ensureLogin, seekerController.cancelJob)
 
 //Job routes
 Router.route("/jobs")

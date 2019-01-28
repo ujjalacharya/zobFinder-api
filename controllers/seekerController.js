@@ -95,7 +95,7 @@ exports.applyJob = async(req,res) =>{
   const { error } = validateJobApplied(req.params);
   if (error) return res.status(400).send(error.details[0].message);
 
-  var id = mongoose.Types.ObjectId(req.params.jobId);
+  let id = mongoose.Types.ObjectId(req.params.jobId);
 
   const job = await Job.findById(id);
   if (!job) return res.status(400).send('Invalid job id.');
@@ -117,6 +117,33 @@ exports.applyJob = async(req,res) =>{
   res.status(200).json(savedjob);
   
 };
+
+// @@ PATCH api/seeker/cancel-job
+// @@ desc Cancel an applied job
+// @@ access Private(Seeker Login)
+exports.cancelJob = async(req, res) =>{
+  let id = mongoose.Types.ObjectId(req.params.jobId);
+  
+  const job = await Job.findById(id);
+  if(!job) return res.status(400).json("No such job found!");
+
+  const seeker = await Seeker.findById(req.user.id);
+  if(!seeker) return res.status(400).json("Invalid User");
+
+  if(job.seekers.filter(seeker=> seeker.seekerId.toString() === req.user.id).length === 0){
+    return res.status(404).json("Not applied for this job")
+  }
+  
+  const removeIndex = job.seekers.map(seeker => seeker.seekerId.toString())
+              .indexOf(req.user.id);
+  
+  job.seekers.splice(removeIndex, 1);
+
+  const savedjob = await job.save();
+  res.status(200).json(savedjob);
+
+
+}
 
 // @@ POST api/seeker/applied-job
 // @@ desc Get all applied job
