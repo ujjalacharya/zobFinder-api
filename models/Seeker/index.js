@@ -27,9 +27,8 @@ const SeekerSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: Number,
-    minlength: 10,
-    maxlength: 10
-  },
+    minlength: 10
+    },
   nationality: String,
   maritalStatus: {
     type: String,

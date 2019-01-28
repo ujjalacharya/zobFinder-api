@@ -68,7 +68,7 @@ exports.validateSeeker = (seeker) => {
       password: Joi.string().min(5).max(1024).required(),
       dob: Joi.date(),
       gender: Joi.string().required(),
-      phoneNumber: Joi.number().min(10).max(10),
+      phoneNumber: Joi.number().min(10),
       nationality: Joi.string(),
       maritalStatus: Joi.string(),
       state: Joi.string(),
@@ -83,3 +83,17 @@ exports.validateJobApplied = (jobId) => {
   };
   return Joi.validate(jobId, schema);
 };
+
+//Seeker profile validation
+exports.validateEducation = (education) =>{
+  const schema = {
+      degree: Joi.string().required(),
+      program: Joi.string().required(),
+      board: Joi.string().required(),
+      institution: Joi.string().required(),
+      percentage: Joi.number(),
+      graduationYear: Joi.number(),
+      startedYear: Joi.number()
+    }
+  return Joi.validate(education, schema);
+}

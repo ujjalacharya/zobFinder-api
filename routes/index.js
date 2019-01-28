@@ -14,13 +14,18 @@ const seekerController = require("../controllers/seekerController");
 const categoryController = require("../controllers/categoryController");
 
 //Seeker controllers
+//Auth and JobApply
 Router
   .get("/seekers", ensureAdmin, seekerController.getAllSeekers)
   .post("/seeker/register", uploadAvatar, seekerController.registerSeeker)
   .post("/seeker/login", seekerController.loginSeeker)
   .post("/seeker/apply-job/:jobId", ensureLogin, seekerController.applyJob)
   .get("/seeker/applied-job", ensureLogin, seekerController.appliedJob)
-  .patch("/seeker/cancel-job/:jobId", ensureLogin, seekerController.cancelJob)
+  .patch("/seeker/cancel-job/:jobId", ensureLogin, seekerController.cancelJob);
+
+//Seeker profile
+Router
+  .post("/seeker/profile/education", ensureLogin, seekerController.postEducation)
 
 //Job routes
 Router.route("/jobs")

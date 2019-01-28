@@ -1,11 +1,12 @@
 const {Seeker} = require("../models/Seeker");
+const {SeekerEducation} = require("../models/Seeker/education");
 const {Job} = require("../models/Job");
 const { secretKey, expireTime } = require("../config/keys.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose');
 
-const {validateSeeker, validateLogin, validateJobApplied} = require("../validation")
+const {validateSeeker, validateLogin, validateJobApplied, validateEducation} = require("../validation")
 
 // @@ GET api/seekers
 // @@ desc GET all seekers
@@ -157,6 +158,31 @@ exports.appliedJob = async(req,res) =>{
       return res.status(200).json(job);
   }
   else{
-      return res.send('you have not applied for any job');
+      return res.status(400).json('you have not applied for any job');
   }
 };
+
+//Proile section
+exports.postEducation = async(req, res) =>{
+  const seeker = await Seeker.findById(req.user._id);
+  if (!seeker) return res.status(400).send('Invalid seeker.');
+
+  const { error } = validateEducation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const education = new SeekerEducation({
+            seekerId: seeker._id,
+            degree: req.body.degree,
+            program: req.body.program,
+            board : req.body.board,
+            institution: req.body.institution,
+            percentage: req.body.percentage,
+            graduationYear: req.body.graduationYear,
+            startedYear: req.body.startedYear
+  });
+
+  seeker.education.push(education._id);
+  const savededucation = await education.save();
+  const savedseeker = await seeker.save();
+  return res.status(200).json({"Success": savededucation})
+}
