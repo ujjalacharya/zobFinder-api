@@ -12,6 +12,7 @@ const jobController = require("../controllers/jobController");
 const employerController = require("../controllers/employerController");
 const seekerController = require("../controllers/seekerController");
 const categoryController = require("../controllers/categoryController");
+const seekerProfileController = require("../controllers/seekerProfileController");
 
 //Seeker controllers
 //Auth and JobApply
@@ -25,7 +26,7 @@ Router
 
 //Seeker profile
 Router
-  .post("/seeker/profile/education", ensureLogin, seekerController.postEducation)
+  .post("/seeker/profile", ensureLogin, seekerProfileController.createProfile)
 
 //Job routes
 Router.route("/jobs")

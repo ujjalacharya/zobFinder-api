@@ -19,47 +19,11 @@ const SeekerSchema = new mongoose.Schema({
     minlength: 8,
     maxlength: 1024
   },
-  dob: Date,
-  gender: {
-    type: String,
-    required: true,
-    enum: ["Male", "Female", "Other"]
-  },
-  phoneNumber: {
-    type: Number,
-    minlength: 10
-    },
-  nationality: String,
-  maritalStatus: {
-    type: String,
-    enum: ["Married", "Not Married"]
-  },
-  state: String,
-  district: String,
-  city: String,
   avatar: String,
   createdAt: {
     type: Date,
     default: Date.now
-  },
-  education: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "seekereducations"
-    }
-  ],
-  skill: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "seekerskills"
-    }
-  ],
-  experience: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "seekerexperiences"
-    }
-  ]
+  }
 });
 
 exports.SeekerSchema = SeekerSchema;

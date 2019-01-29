@@ -66,14 +66,7 @@ exports.validateSeeker = (seeker) => {
       email: Joi.string().min(5).max(255).required(),
       fullName: Joi.string().min(3).max(50).required(),
       password: Joi.string().min(5).max(1024).required(),
-      dob: Joi.date(),
-      gender: Joi.string().required(),
-      phoneNumber: Joi.number().min(10),
-      nationality: Joi.string(),
-      maritalStatus: Joi.string(),
-      state: Joi.string(),
-      city: Joi.string(),
-      district: Joi.string()  };
+        };
   return Joi.validate(seeker, schema);
 };
 
@@ -85,6 +78,13 @@ exports.validateJobApplied = (jobId) => {
 };
 
 //Seeker profile validation
+exports.validateProfile = (profile) =>{
+  const schema = {
+    handle: Joi.string()
+  }
+  return Joi.validate(profile, schema);
+}
+
 exports.validateEducation = (education) =>{
   const schema = {
       degree: Joi.string().required(),
