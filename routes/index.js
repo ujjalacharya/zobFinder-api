@@ -27,6 +27,7 @@ Router
 //Seeker profile
 Router
   .post("/seeker/profile", ensureLogin, seekerProfileController.createProfile)
+  .post("/seeker/education", ensureLogin, seekerProfileController.postEducation);
 
 //Job routes
 Router.route("/jobs")

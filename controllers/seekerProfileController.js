@@ -59,3 +59,24 @@ exports.createProfile = async (req, res) => {
     }
   }
 };
+
+
+
+exports.postEducation = async (req, res) => {
+  const { error } = validateEducation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const profile = await Profile.findOne({ userId: req.user.id });
+  const newEd = {
+    degree: req.body.degree,
+    program: req.body.program,
+    board: req.body.board,
+    institution: req.body.institution,
+    percentage: req.body.percentage,
+    graduationYear: req.body.graduationYear,
+    startedYear: req.body.startedYear
+  };
+  profile.education.unshift(newEd);
+  const savedprofile = await profile.save();
+  res.status(200).json(savedprofile);
+};
